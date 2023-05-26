@@ -11,7 +11,7 @@ interface Props {
 
 const Groups = ({groups, popupContainer}: Props) => {
 	return (
-		<div className="flex items-center h-full space-x-8">
+		<div className="flex items-center h-full space-x-4">
 			{groups.map((group) => (
 				<Popover key={group.name} className="flex">
 					{({open}) => (
