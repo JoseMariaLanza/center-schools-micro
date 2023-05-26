@@ -1,12 +1,14 @@
 import Image from "next/image";
-import Groups from "../Groups";
 import NavigationLink from "@/app/shared/components/NavigationLink";
+import Account from "@/components/Account";
 import {NavBarProps} from "..";
 import logo from "@/public/logoITF.png";
 import {navigation} from "@/app/shared/utils/constants";
 import {classNames} from "@/app/shared/helpers/classNames";
+import {Disclosure} from "@headlessui/react";
+import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 
-const WebNavBar = ({selected, setSelected}: NavBarProps) => {
+const WebNavBar = ({open, children, selected, setSelected}: NavBarProps) => {
 	return (
 		<>
 			{/* Web NavBar */}
@@ -36,11 +38,7 @@ const WebNavBar = ({selected, setSelected}: NavBarProps) => {
 						</div>
 
 						{/* Category groups */}
-						{domReady ? (
-							<Popover.Group className="hidden lg:ml-4 lg:block lg:self-stretch">
-								<Groups popupContainer={webPopupContainer} />
-							</Popover.Group>
-						) : null}
+						{children}
 					</div>
 
 					{/* Profile (Account) dropdown - Web NavBar */}
