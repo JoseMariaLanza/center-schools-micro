@@ -1,32 +1,26 @@
-import {Dispatch, Fragment, SetStateAction} from "react";
-import {Dialog, Tab, Transition} from "@headlessui/react";
+import {Fragment} from "react";
+import {Dialog, Popover, Tab, Transition} from "@headlessui/react";
 import {XMarkIcon} from "@heroicons/react/24/outline";
-import ActiveLink from "./ActiveLink";
+import ActiveLink from "../../../app/shared/components/NavigationLink";
 import {navigation} from "@/app/shared/utils/constants";
+import Auth from "@/components/Auth";
+import Image from "next/image";
+import {MobileNavBarProps} from "..";
 
-function classNames(...classes: string[]) {
-	return classes.filter(Boolean).join(" ");
-}
-
-interface MobileProps {
-	open: boolean;
-	setOpen: Dispatch<SetStateAction<boolean>>;
-	selected: number;
-	setSelected: Dispatch<SetStateAction<number>>;
-}
-
-const MobileBar = ({open, setOpen, selected, setSelected}: MobileProps) => {
-	const selectTab = ({selected}: {selected: boolean}) =>
-		classNames(
-			selected
-				? "border-indigo-600 text-indigo-600"
-				: "border-transparent text-gray-900",
-			"flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium",
-		);
-
+const MobileBar = ({
+	menuOpen,
+	setMenuOpen,
+	selected,
+	setSelected,
+	selectTab,
+}: MobileNavBarProps) => {
 	return (
-		<Transition.Root show={open} as={Fragment}>
-			<Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
+		<Transition.Root show={menuOpen} as={Fragment}>
+			<Dialog
+				as="div"
+				className="relative z-40 lg:hidden"
+				onClose={setMenuOpen}
+			>
 				<Transition.Child
 					as={Fragment}
 					enter="transition-opacity ease-linear duration-300"
@@ -54,7 +48,7 @@ const MobileBar = ({open, setOpen, selected, setSelected}: MobileProps) => {
 								<button
 									type="button"
 									className="-m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
-									onClick={() => setOpen(false)}
+									onClick={() => setMenuOpen(!menuOpen)}
 								>
 									<span className="sr-only">Close menu</span>
 									<XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -72,26 +66,29 @@ const MobileBar = ({open, setOpen, selected, setSelected}: MobileProps) => {
 												selected={selected}
 												setSelected={setSelected}
 												defaultClasses="-m-2 block p-2 font-medium text-gray-900"
-												classNames={classNames}
 											/>
 										))}
 									</div>
 								</Tab.List>
 							</Tab.Group>
 
-							<Tab.Group as="div" className="mt-2">
-								<div className="border-b border-gray-200">
-									<Tab.List className="-mb-px flex space-x-8 px-4">
+							<Popover className="mt-2">
+								<Popover.Group as="div" className="mt-2">
+									<div className="border-b border-gray-200">
+										{/* <Popover.List className="-mb-px flex space-x-8 px-4"> */}
 										{navigation.groups.map((category) => (
-											<Tab key={category.name} className={selectTab}>
+											<Popover
+												key={category.name}
+												className={selectTab(menuOpen)}
+											>
 												{category.name}
-											</Tab>
+											</Popover>
 										))}
-									</Tab.List>
-								</div>
-								<Tab.Panels as={Fragment}>
+										{/* </Popover.List> */}
+									</div>
+									{/* <Popover.Panels as={Fragment}> */}
 									{navigation.groups.map((category) => (
-										<Tab.Panel
+										<Popover.Panel
 											key={category.name}
 											className="space-y-10 px-4 pb-8 pt-10"
 										>
@@ -102,10 +99,12 @@ const MobileBar = ({open, setOpen, selected, setSelected}: MobileProps) => {
 														className="group relative text-sm"
 													>
 														<div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-															<img
+															<Image
 																src={item.imageSrc}
 																alt={item.imageAlt}
 																className="object-cover object-center"
+																width={70}
+																height={70}
 															/>
 														</div>
 														<a
@@ -150,29 +149,15 @@ const MobileBar = ({open, setOpen, selected, setSelected}: MobileProps) => {
 													</ul>
 												</div>
 											))}
-										</Tab.Panel>
+										</Popover.Panel>
 									))}
-								</Tab.Panels>
-							</Tab.Group>
+									{/* </Popover.Panels> */}
+								</Popover.Group>
+							</Popover>
 
-							<div className="space-y-6 border-t border-gray-200 px-4 py-6">
-								<div className="flow-root">
-									<a
-										href="#"
-										className="-m-2 block p-2 font-medium text-gray-900"
-									>
-										Sign in
-									</a>
-								</div>
-								<div className="flow-root">
-									<a
-										href="#"
-										className="-m-2 block p-2 font-medium text-gray-900"
-									>
-										Create account
-									</a>
-								</div>
-							</div>
+							{/* <div onClick={() => setMenuOpen(false)}> */}
+							<Auth componentView="mobile" />
+							{/* </div> */}
 						</Dialog.Panel>
 					</Transition.Child>
 				</div>

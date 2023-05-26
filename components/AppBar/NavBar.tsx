@@ -1,234 +1,159 @@
-/*
-	This example requires some changes to your config:
-  
-	```
-	// tailwind.config.js
-	module.exports = {
-		// ...
-		plugins: [
-			// ...
-			require('@tailwindcss/aspect-ratio'),
-		],
-	}
-	```
-*/
-
-"use client";
-
-import {Fragment, useState} from "react";
-import {Popover, Tab, Transition} from "@headlessui/react";
-import {Bars3Icon, MagnifyingGlassIcon} from "@heroicons/react/24/outline";
-import Link from "next/link";
+import {Fragment, useEffect, useState} from "react";
+import {Disclosure, Menu, Popover, Transition} from "@headlessui/react";
+import {Bars3Icon, BellIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import Image from "next/image";
-import logo from "../../public/logoITF.png";
-import MobileBar from "./MobileBar";
-import ActiveLink from "./ActiveLink";
+import logo from "@/public/logoITF.png";
+import NavigationLink from "../../app/shared/components/NavigationLink";
 import {navigation} from "@/app/shared/utils/constants";
+import Account from "../Account";
+import {NavBarProps} from ".";
+import {classNames} from "@/app/shared/helpers/classNames";
+import Groups from "./Groups";
 
-function classNames(...classes: string[]) {
-	return classes.filter(Boolean).join(" ");
-}
+const user = {
+	name: "Tom Cook",
+	email: "tom@example.com",
+	imageUrl:
+		"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+};
 
-export default function AppBar() {
-	const [open, setOpen] = useState(false);
-	const [selected, setSelected] = useState(1);
+const userNavigation = [
+	{name: "Your Profile", href: "/profile"},
+	{name: "Dashboard", href: "/dashboard"},
+	{name: "Settings", href: "settings"},
+	{name: "Sign out", href: "/logout"},
+];
 
-	const selectTab = (selected: boolean) => {
-		return classNames(
-			selected
-				? "border-indigo-600 text-indigo-600"
-				: "border-transparent text-gray-700 hover:text-gray-800",
-			"relative z-10 -mb-px flex items-center border-b-2 pt-px text-sm font-medium transition-colors duration-200 ease-out",
+export default function AppBar({selected, setSelected}: NavBarProps) {
+	const [webPopupContainer, setPopupContainer] = useState<HTMLElement | null>(
+		null,
+	);
+	const [mobilePopupContainer, setMobilePopupContainer] =
+		useState<HTMLElement | null>(null);
+
+	const [domReady, setDomReady] = useState(false);
+
+	useEffect(() => {
+		setDomReady(true);
+		// if (domReady) {
+		const webPopoverContentEl = document.getElementById("web-popover-content");
+		const mobilePopoverContentEl = document.getElementById(
+			"mobile-popover-content",
 		);
-	};
+		setPopupContainer(webPopoverContentEl);
+		setMobilePopupContainer(mobilePopoverContentEl);
+		// }
+	}, []);
 
 	return (
-		<div className="bg-white">
-			{/* Mobile menu */}
-			<MobileBar
-				open={open}
-				setOpen={setOpen}
-				selected={selected}
-				setSelected={setSelected}
-			/>
+		<div className="min-h-full">
+			<Disclosure as="nav" className="bg-gray-800">
+				{({open}) => (
+					<>
+						{/* Web NavBar */}
+						<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+							<div className="flex h-16 items-center justify-between">
+								<div className="flex items-center">
+									<div className="flex-shrink-0">
+										<Image src={logo} alt="I.T.F." className="h-14 w-auto" />
+									</div>
+									{/* Pages */}
+									<div className="hidden md:flex">
+										<div className="ml-10 flex-1 items-baseline space-x-4">
+											{navigation.pages.map((item) => (
+												<NavigationLink
+													key={item.id}
+													item={item}
+													setSelected={setSelected}
+													className={classNames(
+														selected.id === item.id
+															? "bg-gray-900 text-white border-b-2"
+															: "text-gray-300 hover:bg-gray-700 hover:text-white",
+														"rounded-sm px-3 py-5 text-sm font-medium h-full",
+													)}
+												/>
+											))}
+										</div>
+									</div>
 
-			<header className="relative bg-white">
-				<p className="flex h-10 items-center justify-center bg-gray-800 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-					Manage Facebook, Instagram, Twitter and more social networks from one
-					place.
-				</p>
+									{/* Category groups */}
 
-				<nav
-					aria-label="Top"
-					className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-				>
-					<div className="border-b border-gray-200">
-						<div className="flex h-16 items-center">
-							<button
-								type="button"
-								className="rounded-md bg-white p-2 text-gray-400 lg:hidden"
-								onClick={() => setOpen(true)}
-							>
-								<span className="sr-only">Open menu</span>
-								<Bars3Icon className="h-6 w-6" aria-hidden="true" />
-							</button>
-
-							{/* Logo */}
-							<div className="ml-4 flex lg:ml-0">
-								<a href="#">
-									<span className="sr-only">Your Company</span>
-									<Image src={logo} alt="I.T.F." className="h-14 w-auto" />
-								</a>
-							</div>
-
-							{/* Flyout menus */}
-							<Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
-								<div className="flex h-full space-x-8">
-									{navigation.pages.map((page) => (
-										<ActiveLink
-											key={page.name}
-											item={page}
-											selected={selected}
-											setSelected={setSelected}
-											defaultClasses="flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600"
-											classNames={classNames}
-										/>
-									))}
-
-									{navigation.groups.map((groups) => (
-										<Popover key={groups.name} className="flex">
-											{({open}) => (
-												<>
-													<div className="relative flex">
-														<Popover.Button className={selectTab(open)}>
-															{groups.name}
-														</Popover.Button>
-													</div>
-
-													<Transition
-														as={Fragment}
-														enter="transition ease-out duration-200"
-														enterFrom="opacity-0"
-														enterTo="opacity-100"
-														leave="transition ease-in duration-150"
-														leaveFrom="opacity-100"
-														leaveTo="opacity-0"
-													>
-														<Popover.Panel className="absolute inset-x-0 top-full text-sm text-gray-500">
-															{/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-															<div
-																className="absolute inset-0 top-1/2 bg-white shadow"
-																aria-hidden="true"
-															/>
-
-															<div className="relative bg-white">
-																<div className="mx-auto max-w-7xl px-8">
-																	<div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
-																		<div className="col-start-2 grid grid-cols-2 gap-x-8">
-																			{groups.groupList.map((item) => (
-																				<div
-																					key={item.name}
-																					className="group relative text-base sm:text-sm"
-																				>
-																					<div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-																						<img
-																							src={item.imageSrc}
-																							alt={item.imageAlt}
-																							className="object-cover object-center"
-																						/>
-																					</div>
-																					<a
-																						href={item.href}
-																						className="mt-6 block font-medium text-gray-900"
-																					>
-																						<span
-																							className="absolute inset-0 z-10"
-																							aria-hidden="true"
-																						/>
-																						{item.name}
-																					</a>
-																					<p
-																						aria-hidden="true"
-																						className="mt-1"
-																					>
-																						View this school
-																					</p>
-																				</div>
-																			))}
-																		</div>
-																		<div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
-																			{groups.sections.map((section) => (
-																				<div key={section.name}>
-																					<p
-																						id={`${section.name}-heading`}
-																						className="font-medium text-gray-900"
-																					>
-																						{section.name}
-																					</p>
-																					<ul
-																						role="list"
-																						aria-labelledby={`${section.name}-heading`}
-																						className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
-																					>
-																						{section.items.map((item) => (
-																							<li
-																								key={item.name}
-																								className="flex"
-																							>
-																								<a
-																									href={item.href}
-																									className="hover:text-gray-800"
-																								>
-																									{item.name}
-																								</a>
-																							</li>
-																						))}
-																					</ul>
-																				</div>
-																			))}
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</Popover.Panel>
-													</Transition>
-												</>
-											)}
-										</Popover>
-									))}
+									{domReady ? (
+										<Popover.Group className="hidden lg:ml-4 lg:block lg:self-stretch">
+											<Groups popupContainer={webPopupContainer} />
+										</Popover.Group>
+									) : null}
 								</div>
-							</Popover.Group>
 
-							{/* Search */}
-							<div className="flex lg:ml-6">
-								<a href="#" className="p-2 text-gray-400 hover:text-gray-500">
-									<span className="sr-only">Search</span>
-									<MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
-									{/* on click Icon above, show and focus textfield */}
-								</a>
-							</div>
+								{/* Profile (Account) dropdown - Web NavBar */}
+								<div className="hidden md:block">
+									<div className="ml-4 flex items-center md:ml-6">
+										<Account setSelected={setSelected} />
+									</div>
+								</div>
 
-							<div className="ml-auto flex items-center">
-								<div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-									<a
-										href="#"
-										className="text-sm font-medium text-gray-700 hover:text-gray-800"
-									>
-										Sign in
-									</a>
-									<span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-									<a
-										href="#"
-										className="text-sm font-medium text-gray-700 hover:text-gray-800"
-									>
-										Create account
-									</a>
+								{/* Hidden mobile menu button - Mobile NavBar */}
+								<div className="-mr-2 flex md:hidden">
+									<Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+										<span className="sr-only">Open main menu</span>
+										{open ? (
+											<XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+										) : (
+											<Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+										)}
+									</Disclosure.Button>
 								</div>
 							</div>
 						</div>
-					</div>
-				</nav>
+
+						{/* Hidden mobile menu */}
+						<Disclosure.Panel className="md:hidden">
+							<div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+								{navigation.pages.map((item) => (
+									<Disclosure.Button
+										as={NavigationLink}
+										key={item.id}
+										item={item}
+										setSelected={setSelected}
+										className={classNames(
+											selected.id === item.id
+												? "bg-gray-900 text-white"
+												: "text-gray-300 hover:bg-gray-700 hover:text-white",
+											"block rounded-md px-3 py-2 text-base font-medium",
+										)}
+									/>
+								))}
+							</div>
+
+							{/* Profile (Account) dropdown - Mobile Menu */}
+							<Account setSelected={setSelected} render="mobile" />
+						</Disclosure.Panel>
+						{domReady ? (
+							<Popover.Group className="relative lg:hidden sm:ml-8 sm:block sm:self-stretch">
+								<Groups popupContainer={mobilePopupContainer} />
+							</Popover.Group>
+						) : null}
+					</>
+				)}
+			</Disclosure>
+
+			<header>
+				<div className="w-full bg-white mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+					<h1 className="text-3xl font-bold tracking-tight text-gray-800">
+						{selected.label}
+					</h1>
+				</div>
 			</header>
+
+			<div
+				id="mobile-popover-content"
+				className="lg:hidden lg:block lg:self-stretch"
+			></div>
+
+			<div
+				id="web-popover-content"
+				className="absolute w-full hidden lg:block lg:self-stretch"
+			></div>
 		</div>
 	);
 }
