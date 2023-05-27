@@ -1,17 +1,14 @@
 import {useContext} from "react";
 import WebGroups from "./Web/Groups/Index";
 import MobileGroups from "./Mobile/Groups/Index";
-import {
-	NavigationContext,
-	RenderMobileContext,
-} from "@/app/shared/utils/contexts";
+import {NavigationContext} from "@/app/shared/utils/contexts";
 
 interface Props {
+	renderMobile?: boolean;
 	popupContainer: HTMLElement | null;
 }
 
-const Groups = ({popupContainer}: Props) => {
-	const renderMobile = useContext(RenderMobileContext);
+const Groups = ({renderMobile, popupContainer}: Props) => {
 	const navigation = useContext(NavigationContext);
 
 	return renderMobile ? (

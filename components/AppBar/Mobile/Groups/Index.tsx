@@ -10,6 +10,7 @@ interface Props {
 }
 
 const Groups = ({groups, popupContainer}: Props) => {
+	console.log("RENDERING FOR MOBILE");
 	return (
 		<div className="flex items-center h-full space-x-8">
 			{groups.map((group) => (
@@ -50,8 +51,8 @@ const Groups = ({groups, popupContainer}: Props) => {
 
 												<div className="relative bg-white">
 													<div className="mx-auto max-w-7xl px-8">
-														<div className="grid grid-cols-2 gap-x-8 gap-y-10 py-16">
-															<div className="col-start-2 grid grid-cols-2 gap-x-8">
+														<div className="grid grid-rows-1 gap-x-8 gap-y-10 py-16">
+															<div className="row-start-1 grid grid-rows-2 gap-x-8">
 																{group.groupList.map((item) => (
 																	<div
 																		key={item.name}

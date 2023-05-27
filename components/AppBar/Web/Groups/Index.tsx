@@ -10,6 +10,8 @@ interface Props {
 }
 
 const Groups = ({groups, popupContainer}: Props) => {
+	console.log("RENDERING FOR WEB");
+
 	return (
 		<div className="flex items-center h-full space-x-4">
 			{groups.map((group) => (

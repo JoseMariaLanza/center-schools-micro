@@ -1,10 +1,20 @@
 "use client";
 
-import {Dispatch, SetStateAction, useEffect, useState, ReactNode} from "react";
+import {
+	Dispatch,
+	SetStateAction,
+	useEffect,
+	useState,
+	ReactNode,
+	useContext,
+} from "react";
 import MobileNavBar from "./Mobile";
 import WebNavBar from "./Web";
 import {NavigationItem} from "../../app/shared/utils/types";
-import {navigation} from "@/app/shared/utils/constants";
+import {
+	NavigationContext,
+	RenderMobileContext,
+} from "@/app/shared/utils/contexts";
 import {Popover, Disclosure} from "@headlessui/react";
 import Groups from "./Groups";
 import MobileMenu from "./Mobile/Menu";
@@ -26,6 +36,8 @@ export interface MobileNavBarProps {
 }
 
 const AppBar = () => {
+	// const renderMobile = useContext(RenderMobileContext);
+	const navigation = useContext(NavigationContext);
 	const [domReady, setDomReady] = useState(false);
 	const [selected, setSelected] = useState(navigation.pages[0]);
 	const [webPopupContainer, setPopupContainer] = useState<HTMLElement | null>(
@@ -72,7 +84,10 @@ const AppBar = () => {
 							<MobileNavBar selected={selected} setSelected={setSelected}>
 								{domReady ? (
 									<Popover.Group className="relative lg:hidden sm:ml-8 sm:block sm:self-stretch">
-										<Groups popupContainer={mobilePopupContainer} />
+										<Groups
+											renderMobile={true}
+											popupContainer={mobilePopupContainer}
+										/>
 									</Popover.Group>
 								) : null}
 							</MobileNavBar>
@@ -90,7 +105,7 @@ const AppBar = () => {
 
 				<div
 					id="mobile-popover-content"
-					className="lg:hidden lg:block lg:self-stretch"
+					className="absolute w-full lg:hidden lg:block lg:self-stretch"
 				></div>
 
 				<div
