@@ -36,23 +36,24 @@ export interface MobileNavBarProps {
 }
 
 const AppBar = () => {
-	// const renderMobile = useContext(RenderMobileContext);
+	const renderMobile = useContext(RenderMobileContext);
 	const navigation = useContext(NavigationContext);
 	const [domReady, setDomReady] = useState(false);
 	const [selected, setSelected] = useState(navigation.pages[0]);
-	const [webPopupContainer, setPopupContainer] = useState<HTMLElement | null>(
-		null,
-	);
+	const [webPopupContainer, setWebPopupContainer] =
+		useState<HTMLElement | null>(null);
 	const [mobilePopupContainer, setMobilePopupContainer] =
 		useState<HTMLElement | null>(null);
 
 	useEffect(() => {
 		setDomReady(true);
+
 		const webPopoverContentEl = document.getElementById("web-popover-content");
 		const mobilePopoverContentEl = document.getElementById(
 			"mobile-popover-content",
 		);
-		setPopupContainer(webPopoverContentEl);
+
+		setWebPopupContainer(webPopoverContentEl);
 		setMobilePopupContainer(mobilePopoverContentEl);
 	}, []);
 

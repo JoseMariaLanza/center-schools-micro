@@ -22,21 +22,21 @@ const userNavigation = [
 		current: false,
 	},
 	{
-		id: 1,
+		id: 2,
 		name: "Dashboard",
 		label: "Dashboard:",
 		href: "/dashboard",
 		current: false,
 	},
 	{
-		id: 1,
+		id: 3,
 		name: "Settings",
 		label: "Settings:",
 		href: "/settings",
 		current: false,
 	},
 	{
-		id: 1,
+		id: 4,
 		name: "Sign out",
 		label: "Signing out...",
 		href: "/logout",
@@ -70,7 +70,8 @@ const AuthMenu = ({setSelected}: AccountNavigationProps) => {
 			<div className="mt-3 space-y-1 px-2">
 				{userNavigation.map((item) => (
 					<Disclosure.Button
-						key={item.id}
+						key={`disclosure-mobile-auth-${item.id}`}
+						keyPrefix="link-mobile-auth"
 						as={NavigationLink}
 						item={item}
 						setSelected={setSelected}

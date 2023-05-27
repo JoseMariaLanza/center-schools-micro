@@ -3,12 +3,18 @@ import Link from "next/link";
 import {Dispatch, FC, MouseEvent, SetStateAction} from "react";
 
 interface Props {
+	keyPrefix: string;
 	item: NavigationItem;
 	className: string;
 	setSelected: Dispatch<SetStateAction<NavigationItem>>;
 }
 
-const ActiveLink: FC<Props> = ({item, className, setSelected}) => {
+const ActiveLink: FC<Props> = ({
+	keyPrefix,
+	item,
+	className,
+	setSelected,
+}: Props) => {
 	// const performSelect = (
 	// 	e: MouseEvent<HTMLAnchorElement, MouseEvent>,
 	// 	item: NavigationItem,
@@ -19,6 +25,7 @@ const ActiveLink: FC<Props> = ({item, className, setSelected}) => {
 
 	return (
 		<Link
+			key={`${keyPrefix}-${item.id}`}
 			href={item.href}
 			onClick={() => setSelected(item)}
 			// onClick={(e) => performSelect(e, item)}

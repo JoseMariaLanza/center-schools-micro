@@ -29,7 +29,8 @@ const WebNavBar = ({
 							<div className="ml-10 flex-1 items-baseline space-x-4">
 								{navigation.pages.map((item) => (
 									<NavigationLink
-										key={item.id}
+										key={`web-nav-${item.id}`}
+										keyPrefix="link-web-nav"
 										item={item}
 										setSelected={setSelected}
 										className={classNames(

@@ -5,7 +5,7 @@ import {classNames} from "@/app/shared/helpers/classNames";
 import {Disclosure} from "@headlessui/react";
 import Account from "@/components/Account";
 
-const WebNavBar = ({children, selected, setSelected}: NavBarProps) => {
+const MobileNavBar = ({children, selected, setSelected}: NavBarProps) => {
 	return (
 		<>
 			{/* Hidden mobile menu */}
@@ -14,7 +14,8 @@ const WebNavBar = ({children, selected, setSelected}: NavBarProps) => {
 					{navigation.pages.map((item) => (
 						<Disclosure.Button
 							as={NavigationLink}
-							key={item.id}
+							key={`mobile-nav-${item.id}`}
+							keyPrefix="link-mobile-nav"
 							item={item}
 							setSelected={setSelected}
 							className={classNames(
@@ -35,4 +36,4 @@ const WebNavBar = ({children, selected, setSelected}: NavBarProps) => {
 	);
 };
 
-export default WebNavBar;
+export default MobileNavBar;

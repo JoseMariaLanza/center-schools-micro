@@ -2,11 +2,11 @@ import {Disclosure} from "@headlessui/react";
 import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 import React from "react";
 
-interface menuState {
+interface MenuState {
 	open: boolean;
 }
 
-const Menu = ({open}: menuState) => {
+const Menu = ({open}: MenuState) => {
 	return (
 		<>
 			{/* Hidden mobile menu button - Mobile NavBar */}
