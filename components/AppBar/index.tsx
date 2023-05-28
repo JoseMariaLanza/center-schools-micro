@@ -76,7 +76,7 @@ const AppBar = () => {
 								mobileMenu={<MobileMenu open={open} />}
 							>
 								{domReady ? (
-									<Popover.Group className="hidden lg:ml-4 lg:block lg:self-stretch">
+									<Popover.Group className="hidden md:ml-2 md:block md:self-stretch">
 										<Groups popupContainer={webPopupContainer} />
 									</Popover.Group>
 								) : null}
@@ -84,7 +84,7 @@ const AppBar = () => {
 
 							<MobileNavBar selected={selected} setSelected={setSelected}>
 								{domReady ? (
-									<Popover.Group className="relative lg:hidden sm:ml-8 sm:block sm:self-stretch">
+									<Popover.Group className="relative lg:hidden sm:ml-4 sm:block sm:self-stretch">
 										<Groups
 											renderMobile={true}
 											popupContainer={mobilePopupContainer}
@@ -111,7 +111,7 @@ const AppBar = () => {
 
 				<div
 					id="web-popover-content"
-					className="absolute w-full hidden lg:block lg:self-stretch"
+					className="absolute w-full hidden md:block md:self-stretch"
 				></div>
 			</div>
 		</div>

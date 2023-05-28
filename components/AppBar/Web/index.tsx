@@ -5,11 +5,8 @@ import {NavBarProps} from "..";
 import logo from "@/public/logoITF.png";
 import {navigation} from "@/app/shared/utils/constants";
 import {classNames} from "@/app/shared/helpers/classNames";
-import {Disclosure} from "@headlessui/react";
-import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 
 const WebNavBar = ({
-	open,
 	children,
 	mobileMenu,
 	selected,
@@ -26,7 +23,7 @@ const WebNavBar = ({
 						</div>
 						{/* Pages */}
 						<div className="hidden md:flex">
-							<div className="ml-10 flex-1 items-baseline space-x-4">
+							<div className="ml-4 flex-1 items-baseline space-x-4">
 								{navigation.pages.map((item) => (
 									<NavigationLink
 										key={`web-nav-${item.id}`}
@@ -50,7 +47,7 @@ const WebNavBar = ({
 
 					{/* Profile (Account) dropdown - Web NavBar */}
 					<div className="hidden md:block">
-						<div className="ml-4 flex items-center md:ml-6">
+						<div className="ml-2 flex items-center md:ml-6">
 							<Account setSelected={setSelected} />
 						</div>
 					</div>

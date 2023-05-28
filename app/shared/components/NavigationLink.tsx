@@ -1,6 +1,6 @@
 import {NavigationItem} from "@/app/shared/utils/types";
 import Link from "next/link";
-import {Dispatch, FC, MouseEvent, SetStateAction} from "react";
+import {Dispatch, FC, SetStateAction} from "react";
 
 interface Props {
 	keyPrefix: string;
@@ -15,20 +15,11 @@ const ActiveLink: FC<Props> = ({
 	className,
 	setSelected,
 }: Props) => {
-	// const performSelect = (
-	// 	e: MouseEvent<HTMLAnchorElement, MouseEvent>,
-	// 	item: NavigationItem,
-	// ) => {
-	// 	console.log("EVENT: ", e);
-	// 	setSelected(item);
-	// };
-
 	return (
 		<Link
 			key={`${keyPrefix}-${item.id}`}
 			href={item.href}
 			onClick={() => setSelected(item)}
-			// onClick={(e) => performSelect(e, item)}
 			className={className}
 			aria-current={item.current ? "page" : undefined}
 		>

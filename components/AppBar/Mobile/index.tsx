@@ -30,8 +30,9 @@ const MobileNavBar = ({children, selected, setSelected}: NavBarProps) => {
 
 				{/* Profile (Account) dropdown - Mobile Menu */}
 				<Account setSelected={setSelected} render="mobile" />
+
+				{children}
 			</Disclosure.Panel>
-			{children}
 		</>
 	);
 };

@@ -54,7 +54,7 @@ const AuthMenu = ({setSelected}: AccountNavigationProps) => {
 				<span className="sr-only">View notifications</span>
 				<BellIcon className="h-6 w-6" aria-hidden="true" />
 			</button>
-			<Menu as="div" className="relative ml-3">
+			<Menu as="div" className="relative">
 				<div>
 					<Menu.Button className="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
 						<span className="sr-only">Open user menu</span>
